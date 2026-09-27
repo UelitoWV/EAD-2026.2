@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Educação midiática diante de conteúdos sintéticos e deepfakes | Minicurso</title>
+<meta name="description" content="Minicurso gratuito e autoinstrucional: aprenda a identificar indícios de manipulação por IA, fazer busca reversa e avaliar criticamente conteúdos online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F6F8; --white:#fff; --ink:#101828; --muted:#475467; --line:#D0D5DD;
+  --cyan:#00707C; --mag:#B4235A; --ok:#0B6E3A; --okbg:#E6F4EC; --bad:#A4262C; --badbg:#FBEAEA; --sun:#FFD23F;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+  --head:"Bricolage Grotesque","Arial Black",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1rem}
+body{margin:0;background:var(--paper);color:var(--ink);font:1.125rem/1.65 var(--body)}
+h1,h2,h3{font-family:var(--head);line-height:1.15;margin:0 0 .6em;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800}
+h3{font-size:1.25rem;font-weight:600}
+p{margin:0 0 1em;max-width:68ch}
+a{color:var(--cyan);text-underline-offset:.2em}
+a:hover{color:var(--mag)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 3px var(--sun)}
+.skip{position:absolute;left:.5rem;top:-4rem;background:var(--ink);color:#fff;padding:.7rem 1rem;border-radius:6px;z-index:10}
+.skip:focus{top:.5rem}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.25rem}
+
+/* Cabeçalho */
+.hero{padding:clamp(2.5rem,8vw,5.5rem) 0 2.5rem;border-bottom:1px solid var(--line);background:var(--white)}
+.hero .tag{font-weight:700;color:var(--muted);margin-bottom:1rem}
+.hero h1{font-size:clamp(2.2rem,7vw,4.6rem);font-weight:800;max-width:16ch;margin-bottom:.5em;
+  text-shadow:-.045em 0 #2BC4D4,.045em 0 #E0447F} /* efeito de canais desalinhados: referência visual à manipulação */
+.hero .lead{font-size:1.3rem;max-width:56ch}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:0;border-radius:6px;padding:.8rem 1.4rem;font:700 1.05rem var(--body);text-decoration:none;cursor:pointer;min-height:48px}
+.btn:hover{background:var(--cyan);color:#fff}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn.alt:hover{background:var(--ink);color:#fff}
+
+/* Layout com trilha lateral */
+.layout{display:grid;gap:2rem;padding:2.5rem 0 4rem}
+.trail{font-size:1rem}
+.trail h2{font-size:1.1rem;margin-bottom:.6rem}
+.trail ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.trail a{display:block;padding:.5rem .8rem;border:2px solid var(--line);border-radius:6px;background:var(--white);color:var(--ink);text-decoration:none;font-weight:700;min-height:44px}
+.trail a:hover{border-color:var(--ink);color:var(--ink)}
+@media(min-width:960px){
+  .layout{grid-template-columns:230px minmax(0,1fr);gap:3.5rem}
+  .trail{position:sticky;top:1.5rem;align-self:start}
+  .trail ol{flex-direction:column;border-left:3px solid var(--line);gap:0}
+  .trail a{border:0;border-radius:0;background:none;padding:.65rem 1rem;margin-left:-3px;border-left:3px solid transparent}
+  .trail a:hover{border-left-color:var(--mag);background:var(--white)}
+}
+section{padding:0 0 3rem;margin-bottom:3rem;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+
+/* Ficha do curso */
+dl.ficha{display:grid;gap:1.25rem;margin:0}
+.ficha dt{font-family:var(--head);font-weight:800;font-size:1.05rem}
+.ficha dd{margin:.2rem 0 0;max-width:68ch}
+ul.obj{padding-left:1.2rem;max-width:68ch}
+ul.obj li{margin-bottom:.6rem}
+
+/* Vídeos */
+.video{aspect-ratio:16/9;background:var(--ink);border-radius:8px;overflow:hidden;margin:1.25rem 0;display:grid;place-items:center;color:#fff;text-align:center;padding:1rem}
+.video iframe{width:100%;height:100%;border:0}
+details{margin:0 0 1rem;max-width:68ch}
+summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.mod-meta{color:var(--muted);font-weight:700;margin-bottom:.4rem}
+.tools{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:1rem 1.25rem;max-width:68ch}
+.tools ul{margin:.4rem 0 0;padding-left:1.2rem}
+
+/* Avaliação */
+#quiz{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:clamp(1rem,3vw,2rem);max-width:760px}
+.qhead{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;font-weight:700}
+progress{flex:1;height:.7rem;accent-color:var(--cyan)}
+#quiz h3:focus{outline:none;box-shadow:none}
+.scen{background:var(--paper);border-left:4px solid var(--cyan);padding:.8rem 1rem;border-radius:0 6px 6px 0}
+fieldset{border:0;padding:0;margin:0 0 1rem}
+legend{font-weight:700;padding:0;margin-bottom:.7rem}
+.opt{display:flex;gap:.8rem;align-items:flex-start;border:2px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin-bottom:.6rem;cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt:has(input:checked){border-color:var(--ink);background:var(--paper)}
+.opt input{width:1.3rem;height:1.3rem;margin-top:.2rem;accent-color:var(--ink);flex:none}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+#err{color:var(--bad);font-weight:700;min-height:1.5em;margin:0 0 .5rem}
+#fb{border-radius:8px;margin-bottom:1rem}
+#fb:empty{display:none}
+#fb.ok{background:var(--okbg);border:2px solid var(--ok);padding:1rem}
+#fb.bad{background:var(--badbg);border:2px solid var(--bad);padding:1rem}
+#fb p{margin:0 0 .6em}#fb p:last-child{margin:0}
+.res{font-family:var(--head);font-size:2.4rem;font-weight:800;margin:.2rem 0}
+
+footer{background:var(--ink);color:#E4E7EC;padding:2rem 0;font-size:1rem}
+footer a{color:#7FE3EE}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo principal</a>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="tag">Minicurso autoinstrucional · gratuito · no seu ritmo</p>
+    <h1>Educação midiática diante de conteúdos sintéticos e deepfakes</h1>
+    <p class="lead">Aprenda a desconfiar com método: identificar indícios de manipulação por IA, investigar a origem de imagens e áudios e decidir o que merece confiança.</p>
+    <a class="btn" href="#modulo-1">Começar pelo Módulo 1</a>
+    <a class="btn alt" href="#avaliacao">Ir direto à avaliação</a>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="trail" aria-label="Sequência do minicurso">
+    <h2>Trilha de estudo</h2>
+    <ol>
+      <li><a href="#sobre">Sobre o curso</a></li>
+      <li><a href="#modulo-1">Módulo 1: Deepfakes</a></li>
+      <li><a href="#modulo-2">Módulo 2: Investigação</a></li>
+      <li><a href="#modulo-3">Módulo 3: Limites</a></li>
+      <li><a href="#modulo-4">Módulo 4: Caso real</a></li>
+      <li><a href="#avaliacao">Avaliação</a></li>
+    </ol>
+  </nav>
+
+  <main id="conteudo" tabindex="-1">
+
+    <section id="sobre" aria-labelledby="t-sobre">
+      <h2 id="t-sobre">Sobre o curso</h2>
+      <p>Imagens, vídeos e vozes falsos criados por inteligência artificial circulam todos os dias nas redes. Este minicurso ensina um caminho prático para checar o que você vê e ouve antes de acreditar ou compartilhar.</p>
+      <dl class="ficha">
+        <div><dt>Autor(a)</dt>
+          <dd>Wellington Viana da Silva Junior<br>Bacharelado em Ciência da Computação | UFRPE<br><a href="mailto:wellington.viana@ufrpe.br">wellington.viana@ufrpe.br</a></dd></div>
+        <div><dt>Público-alvo</dt>
+          <dd>Estudantes do ensino superior e pessoas interessadas em letramento digital e pensamento crítico.</dd></div>
+        <div><dt>Conhecimentos prévios</dt>
+          <dd>Apenas familiaridade básica com navegação na web. Você precisa de um computador ou smartphone com conexão estável para assistir aos vídeos e usar as ferramentas.</dd></div>
+        <div><dt>Objetivos de aprendizagem</dt>
+          <dd>Ao concluir o minicurso, você será capaz de:
+            <ul class="obj">
+              <li>identificar indícios visuais e sonoros de manipulação por IA;</li>
+              <li>realizar buscas reversas de imagens e textos para checar a origem de uma mídia;</li>
+              <li>avaliar criticamente a confiabilidade de conteúdos online, cruzando fontes.</li>
+            </ul></dd></div>
+        <div><dt>Como estudar</dt>
+          <dd>Siga a ordem dos módulos. Cada um tem um vídeo com legendas ativáveis e uma transcrição em texto. No final, responda à avaliação com feedback explicativo em cada questão.</dd></div>
+      </dl>
+    </section>
+
+    <section id="modulo-1" aria-labelledby="t-m1">
+      <p class="mod-meta">Módulo 1 de 4</p>
+      <h2 id="t-m1">O que são deepfakes e por que importam</h2>
+      <p>Entenda o que são conteúdos sintéticos, como são produzidos e quais os impactos na política, nas relações pessoais e na confiança pública.</p>
+      <div class="video" data-video="m1" data-title="Videoaula do Módulo 1: O que são deepfakes e por que importam"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 1.]</p></details>
+    </section>
+
+    <section id="modulo-2" aria-labelledby="t-m2">
+      <p class="mod-meta">Módulo 2 de 4</p>
+      <h2 id="t-m2">Métodos práticos de investigação</h2>
+      <p>Aprenda a observar sinais visuais e a checar a origem de uma mídia com busca reversa e checagem cruzada.</p>
+      <div class="tools"><strong>Ferramentas apresentadas</strong>
+        <ul>
+          <li>Google Lens e TinEye, para busca reversa de imagens;</li>
+          <li>InVID-WeVerify, para extrair quadros de vídeos;</li>
+          <li>Agências de checagem e buscas por termos-chave, para checagem cruzada.</li>
+        </ul></div>
+      <div class="video" data-video="m2" data-title="Videoaula do Módulo 2: Métodos práticos de investigação"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 2.]</p></details>
+    </section>
+
+    <section id="modulo-3" aria-labelledby="t-m3">
+      <p class="mod-meta">Módulo 3 de 4</p>
+      <h2 id="t-m3">Limites e armadilhas das ferramentas de verificação</h2>
+      <p>Detectores de IA erram, buscas reversas nem sempre encontram a origem e a ausência de sinais não prova autenticidade. Veja como evitar falsas certezas.</p>
+      <div class="video" data-video="m3" data-title="Videoaula do Módulo 3: Limites e armadilhas das ferramentas de verificação"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 3.]</p></details>
+    </section>
+
+    <section id="modulo-4" aria-labelledby="t-m4">
+      <p class="mod-meta">Módulo 4 de 4</p>
+      <h2 id="t-m4">Demonstração prática: analisando um caso real</h2>
+      <p>Acompanhe, passo a passo, a análise de um conteúdo sintético de origem conhecida, aplicando tudo o que você viu nos módulos anteriores.</p>
+      <div class="video" data-video="m4" data-title="Videoaula do Módulo 4: Demonstração prática com um caso real"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 4.]</p></details>
+    </section>
+
+    <section id="avaliacao" aria-labelledby="t-av">
+      <h2 id="t-av">Avaliação interativa</h2>
+      <p>Cinco cenários do dia a dia. Escolha uma alternativa, verifique e leia a explicação: ela vale tanto para os acertos quanto para os erros.</p>
+      <div id="quiz"><noscript>Ative o JavaScript no navegador para responder à avaliação.</noscript></div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Minicurso “Educação midiática diante de conteúdos sintéticos e deepfakes”. Autoria: Wellington Viana da Silva Junior - UFRPE. <a href="#conteudo">Voltar ao topo</a></p>
+  </div>
+</footer>
+
+<script>
+/* ===== CONFIGURAÇÃO: cole aqui o ID de cada vídeo do YouTube =====
+   Exemplo: para https://youtu.be/AbC123xyz, use "AbC123xyz". */
+const VIDEOS = { m1:"https://youtu.be/Qw20tg1v7Fc", m2:"", m3:"", m4:"" };
+
+document.querySelectorAll(".video").forEach(el=>{
+  const id = VIDEOS[el.dataset.video];
+  if(id){
+    const f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/"+encodeURIComponent(id)+"?rel=0&cc_load_policy=1&hl=pt-BR";
+    f.title = el.dataset.title; f.loading = "lazy"; f.allowFullscreen = true;
+    f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture";
+    el.appendChild(f);
+  } else {
+    el.innerHTML = "<p>Vídeo em breve.<br>Adicione o ID do YouTube em <code>VIDEOS</code> no final do arquivo.</p>";
+  }
+});
+
+/* ===== AVALIAÇÃO ===== */
+const Q = [
+ { c:"Um vídeo mostra um político famoso dizendo algo chocante. Ele já tem milhares de curtidas e compartilhamentos, mas nenhum veículo de imprensa o cita.",
+   p:"Qual é o melhor primeiro passo?",
+   o:[
+    {t:"Compartilhar com um aviso de “será que é verdade?”.", ok:0, fb:"Compartilhar, mesmo com dúvida, ajuda a espalhar o conteúdo antes de qualquer checagem."},
+    {t:"Procurar a fonte original do vídeo e ver se veículos confiáveis ou agências de checagem tratam do caso.", ok:1, fb:"Rastrear a origem e cruzar fontes é a base da checagem. A ausência do assunto na imprensa já é um alerta."},
+    {t:"Confiar no vídeo, porque muitas curtidas indicam que é verdadeiro.", ok:0, fb:"Popularidade não é prova. Conteúdos falsos costumam viralizar justamente por serem chocantes."},
+    {t:"Examinar apenas os dedos das mãos do político.", ok:0, fb:"Olhar um único detalhe visual é insuficiente. Sinais visuais ajudam, mas não substituem a checagem de origem."}]},
+ { c:"Circula uma foto de uma enchente com a legenda “aconteceu hoje na minha cidade”. Você faz uma busca reversa e encontra a mesma foto publicada em 2019, em outro país.",
+   p:"Qual é a conclusão mais adequada?",
+   o:[
+    {t:"A imagem é real, mas está fora de contexto: a legenda é enganosa.", ok:1, fb:"Nem toda desinformação usa IA. Reaproveitar mídia antiga com outra legenda é muito comum, e a busca reversa serve para expor isso."},
+    {t:"A imagem foi gerada por IA.", ok:0, fb:"A busca mostra que a foto é antiga, não que foi gerada por IA. Evite conclusões que os dados não sustentam."},
+    {t:"Não dá para concluir nada, porque a foto existe na internet.", ok:0, fb:"Ao contrário: a data e o local da primeira publicação são justamente evidências úteis."},
+    {t:"A legenda está certa, porque a enchente parece verdadeira.", ok:0, fb:"Parecer verdadeiro não basta. Data e local precisam ser confirmados pela origem da imagem."}]},
+ { c:"Numa imagem suspeita, você nota mãos com formatos estranhos e um texto ilegível numa placa ao fundo.",
+   p:"O que esses sinais indicam?",
+   o:[
+    {t:"Provam que a imagem é falsa.", ok:0, fb:"São sinais frequentes em imagens geradas por IA, mas não são prova definitiva: compressão e edições comuns também causam distorções."},
+    {t:"Aumentam a suspeita, mas devem ser combinados com a checagem de origem e contexto.", ok:1, fb:"Indícios visuais orientam a investigação. A conclusão vem da soma de evidências: origem, contexto e outras fontes."},
+    {t:"São irrelevantes, porque a IA já não comete esses erros.", ok:0, fb:"A tecnologia melhora, mas ainda deixa falhas. O erro é tratar a ausência de falhas como prova de autenticidade."},
+    {t:"Só importam se a imagem tiver rostos.", ok:0, fb:"Mãos, textos, sombras e reflexos podem revelar manipulação em qualquer tipo de imagem."}]},
+ { c:"Você recebe um áudio de WhatsApp com a voz de um parente pedindo uma transferência urgente de dinheiro, vinda de um número desconhecido.",
+   p:"O que fazer antes de transferir?",
+   o:[
+    {t:"Transferir logo: a voz é idêntica à dele.", ok:0, fb:"Vozes podem ser clonadas com poucos segundos de áudio. Urgência e pedido de dinheiro são sinais clássicos de golpe."},
+    {t:"Responder ao próprio áudio pedindo mais detalhes.", ok:0, fb:"Isso mantém você no canal controlado por quem pode estar aplicando o golpe."},
+    {t:"Entrar em contato com o parente por outro canal, como uma ligação para o número que você já conhece.", ok:1, fb:"Confirmar por um canal independente é a forma mais simples e eficaz de checar um áudio suspeito."},
+    {t:"Procurar erros de gramática no áudio.", ok:0, fb:"Áudio não tem gramática a checar de forma confiável, e a fala clonada pode ser natural. O ponto é confirmar a identidade."}]},
+ { c:"Um site detector de IA analisa uma imagem e responde: “98% de chance de ser real”. Mesmo assim, a imagem não tem origem identificável e nenhuma fonte a confirma.",
+   p:"Como interpretar esse resultado?",
+   o:[
+    {t:"A imagem está confirmada como autêntica.", ok:0, fb:"Detectores erram, podem ser enganados e variam entre si. Um percentual não é atestado de autenticidade."},
+    {t:"O detector deve ser ignorado sempre.", ok:0, fb:"Ele pode ser útil como um indício entre outros. O problema é usá-lo como única prova."},
+    {t:"É um indício, não uma prova: falta cruzar com origem, contexto e outras fontes.", ok:1, fb:"Ferramentas de verificação têm limites. A conclusão responsável combina vários métodos e admite incerteza."},
+    {t:"Se o resultado fosse 100%, seria prova definitiva.", ok:0, fb:"Nem 100% garantiria autenticidade: nenhum detector é infalível."}]}
+];
+
+const box = document.getElementById("quiz");
+let i = 0, score = 0, done = false;
+
+function render(){
+  if(i >= Q.length) return result();
+  const q = Q[i]; done = false;
+  box.innerHTML = `
+    <div class="qhead"><h3 id="qh" tabindex="-1" style="margin:0;font-size:1rem">Questão ${i+1} de ${Q.length}</h3>
+      <progress max="${Q.length}" value="${i}" aria-label="Progresso da avaliação"></progress></div>
+    <p class="scen" id="qc">${q.c}</p>
+    <form id="qf" novalidate>
+      <fieldset aria-describedby="qc"><legend>${q.p}</legend>
+        ${q.o.map((o,k)=>`<label class="opt"><input type="radio" name="o" value="${k}"><span>${o.t}</span></label>`).join("")}
+      </fieldset>
+      <p id="err" role="alert"></p>
+      <div id="fb" tabindex="-1" aria-live="polite"></div>
+      <button class="btn" type="submit" id="go">Verificar resposta</button>
+    </form>`;
+  document.getElementById("qf").addEventListener("submit", onSubmit);
+}
+
+function onSubmit(e){
+  e.preventDefault();
+  const err = document.getElementById("err");
+  if(done){ i++; render(); const h = document.getElementById("qh"); if(h) h.focus(); return; }
+  const sel = document.querySelector('input[name="o"]:checked');
+  if(!sel){ err.textContent = "Selecione uma alternativa antes de verificar."; return; }
+  err.textContent = "";
+  const q = Q[i], k = +sel.value, chosen = q.o[k], right = q.o.findIndex(o=>o.ok);
+  const labels = document.querySelectorAll(".opt");
+  labels.forEach((l,n)=>{ l.querySelector("input").disabled = true; if(q.o[n].ok) l.classList.add("ok"); else if(n===k) l.classList.add("bad"); });
+  const fb = document.getElementById("fb");
+  if(chosen.ok){ score++; fb.className = "ok"; fb.innerHTML = `<p><strong>Resposta correta.</strong></p><p>${chosen.fb}</p>`; }
+  else { fb.className = "bad"; fb.innerHTML = `<p><strong>Resposta incorreta.</strong></p><p>${chosen.fb}</p><p><strong>Alternativa correta:</strong> ${q.o[right].t}</p><p>${q.o[right].fb}</p>`; }
+  done = true;
+  document.getElementById("go").textContent = i+1 < Q.length ? "Próxima questão" : "Ver resultado";
+  fb.focus();
+}
+
+function result(){
+  const msg = score === Q.length ? "Excelente! Você aplicou muito bem os métodos de verificação."
+    : score >= 3 ? "Bom resultado! Revise os módulos das questões que errou para consolidar."
+    : "Vale rever os módulos com calma e tentar de novo. Checar é uma habilidade que se treina.";
+  box.innerHTML = `<h3 id="qh" tabindex="-1">Resultado da avaliação</h3>
+    <p class="res">${score} de ${Q.length} acertos</p><p>${msg}</p>
+    <button class="btn" id="again" type="button">Refazer a avaliação</button>
+    <a class="btn alt" href="#modulo-1">Rever os módulos</a>`;
+  document.getElementById("again").addEventListener("click", ()=>{ i = 0; score = 0; render(); document.getElementById("qh").focus(); });
+  document.getElementById("qh").focus();
+}
+render();
+</script>
+</body>
+</html>
