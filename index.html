@@ -7,13 +7,13 @@
 <meta name="description" content="Minicurso gratuito e autoinstrucional: aprenda a identificar indícios de manipulação por IA, fazer busca reversa e avaliar criticamente conteúdos online.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F5F6F8; --white:#fff; --ink:#101828; --muted:#475467; --line:#D0D5DD;
   --cyan:#00707C; --mag:#B4235A; --ok:#0B6E3A; --okbg:#E6F4EC; --bad:#A4262C; --badbg:#FBEAEA; --sun:#FFD23F;
   --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
-  --head:"Bricolage Grotesque","Arial Black",system-ui,sans-serif;
+  --head:"Lexend",Verdana,system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:1rem}
@@ -32,8 +32,7 @@ a:hover{color:var(--mag)}
 /* Cabeçalho */
 .hero{padding:clamp(2.5rem,8vw,5.5rem) 0 2.5rem;border-bottom:1px solid var(--line);background:var(--white)}
 .hero .tag{font-weight:700;color:var(--muted);margin-bottom:1rem}
-.hero h1{font-size:clamp(2.2rem,7vw,4.6rem);font-weight:800;max-width:16ch;margin-bottom:.5em;
-  text-shadow:-.045em 0 #2BC4D4,.045em 0 #E0447F} /* efeito de canais desalinhados: referência visual à manipulação */
+.hero h1{font-size:clamp(2.2rem,7vw,4.6rem);font-weight:800;max-width:16ch;margin-bottom:.5em;color:var(--ink)}
 .hero .lead{font-size:1.3rem;max-width:56ch}
 .btn{display:inline-block;background:var(--ink);color:#fff;border:0;border-radius:6px;padding:.8rem 1.4rem;font:700 1.05rem var(--body);text-decoration:none;cursor:pointer;min-height:48px}
 .btn:hover{background:var(--cyan);color:#fff}
@@ -133,7 +132,7 @@ footer a{color:#7FE3EE}
       <p>Imagens, vídeos e vozes falsos criados por inteligência artificial circulam todos os dias nas redes. Este minicurso ensina um caminho prático para checar o que você vê e ouve antes de acreditar ou compartilhar.</p>
       <dl class="ficha">
         <div><dt>Autor(a)</dt>
-          <dd>Wellington Viana da Silva Junior<br>Bacharelado em Ciência da Computação | UFRPE<br><a href="mailto:wellington.viana@ufrpe.br">wellington.viana@ufrpe.br</a></dd></div>
+          <dd>[Seu nome completo]<br>[Curso / instituição]<br><a href="mailto:seu.email@exemplo.com">seu.email@exemplo.com</a></dd></div>
         <div><dt>Público-alvo</dt>
           <dd>Estudantes do ensino superior e pessoas interessadas em letramento digital e pensamento crítico.</dd></div>
         <div><dt>Conhecimentos prévios</dt>
@@ -198,14 +197,14 @@ footer a{color:#7FE3EE}
 
 <footer>
   <div class="wrap">
-    <p>Minicurso “Educação midiática diante de conteúdos sintéticos e deepfakes”. Autoria: Wellington Viana da Silva Junior - UFRPE. <a href="#conteudo">Voltar ao topo</a></p>
+    <p>Minicurso “Educação midiática diante de conteúdos sintéticos e deepfakes”. Autoria: [Seu nome]. <a href="#conteudo">Voltar ao topo</a></p>
   </div>
 </footer>
 
 <script>
 /* ===== CONFIGURAÇÃO: cole aqui o ID de cada vídeo do YouTube =====
    Exemplo: para https://youtu.be/AbC123xyz, use "AbC123xyz". */
-const VIDEOS = { m1:"https://youtu.be/Qw20tg1v7Fc", m2:"", m3:"", m4:"" };
+const VIDEOS = { m1:"", m2:"", m3:"", m4:"" };
 
 document.querySelectorAll(".video").forEach(el=>{
   const id = VIDEOS[el.dataset.video];
@@ -214,6 +213,7 @@ document.querySelectorAll(".video").forEach(el=>{
     f.src = "https://www.youtube-nocookie.com/embed/"+encodeURIComponent(id)+"?rel=0&cc_load_policy=1&hl=pt-BR";
     f.title = el.dataset.title; f.loading = "lazy"; f.allowFullscreen = true;
     f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture";
+    f.referrerPolicy = "strict-origin-when-cross-origin"; /* exigido pelo player do YouTube */
     el.appendChild(f);
   } else {
     el.innerHTML = "<p>Vídeo em breve.<br>Adicione o ID do YouTube em <code>VIDEOS</code> no final do arquivo.</p>";
