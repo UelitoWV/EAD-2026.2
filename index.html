@@ -66,6 +66,8 @@ ul.obj li{margin-bottom:.6rem}
 /* Vídeos */
 .video{aspect-ratio:16/9;background:var(--ink);border-radius:8px;overflow:hidden;margin:1.25rem 0;display:grid;place-items:center;color:#fff;text-align:center;padding:1rem}
 .video iframe{width:100%;height:100%;border:0}
+.embed{aspect-ratio:4/3;max-height:80vh;width:100%;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:1.25rem 0;display:grid;place-items:center;text-align:center;padding:1rem}
+.embed iframe{width:100%;height:100%;border:0}
 details{margin:0 0 1rem;max-width:68ch}
 summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
 .mod-meta{color:var(--muted);font-weight:700;margin-bottom:.4rem}
@@ -96,6 +98,20 @@ legend{font-weight:700;padding:0;margin-bottom:.7rem}
 
 footer{background:var(--ink);color:#E4E7EC;padding:2rem 0;font-size:1rem}
 footer a{color:#7FE3EE}
+
+/* ===== Paleta expandida por etapa da trilha ===== */
+:root{--teal:#00707C;--mag:#B4235A;--vio:#5B3FA8;--amb:#B45309}
+.hero{border-top:8px solid transparent;border-image:linear-gradient(90deg,var(--teal),var(--mag),var(--vio),var(--amb)) 1}
+#modulo-1,#modulo-2,#modulo-3,#modulo-4,#podcast,#jogo,#avaliacao{border-top:5px solid var(--c);padding-top:1.5rem}
+#modulo-1{--c:var(--teal)}#modulo-2{--c:var(--mag)}#modulo-3{--c:var(--vio)}#modulo-4{--c:var(--amb)}
+#podcast{--c:var(--teal)}#jogo{--c:var(--mag)}#avaliacao{--c:var(--vio)}
+#modulo-1 .mod-meta,#modulo-1 h2{color:var(--teal)}#modulo-2 .mod-meta,#modulo-2 h2{color:var(--mag)}
+#modulo-3 .mod-meta,#modulo-3 h2{color:var(--vio)}#modulo-4 .mod-meta,#modulo-4 h2{color:var(--amb)}
+#podcast .mod-meta,#podcast h2{color:var(--teal)}#jogo .mod-meta,#jogo h2{color:var(--mag)}#avaliacao h2{color:var(--vio)}
+.trail li:nth-child(2) a{border-left-color:var(--teal)}.trail li:nth-child(3) a{border-left-color:var(--mag)}
+.trail li:nth-child(4) a{border-left-color:var(--vio)}.trail li:nth-child(5) a{border-left-color:var(--amb)}
+.trail li:nth-child(6) a{border-left-color:var(--teal)}.trail li:nth-child(7) a{border-left-color:var(--mag)}.trail li:nth-child(8) a{border-left-color:var(--vio)}
+.btn:hover{background:var(--vio)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -121,6 +137,8 @@ footer a{color:#7FE3EE}
       <li><a href="#modulo-2">Módulo 2: Investigação</a></li>
       <li><a href="#modulo-3">Módulo 3: Limites</a></li>
       <li><a href="#modulo-4">Módulo 4: Caso real</a></li>
+      <li><a href="#podcast">Podcast: Verificação na Vida Real</a></li>
+      <li><a href="#jogo">Jogo: Detetive</a></li>
       <li><a href="#avaliacao">Avaliação</a></li>
     </ol>
   </nav>
@@ -154,6 +172,7 @@ footer a{color:#7FE3EE}
       <h2 id="t-m1">O que são deepfakes e por que importam</h2>
       <p>Entenda o que são conteúdos sintéticos, como são produzidos e quais os impactos na política, nas relações pessoais e na confiança pública.</p>
       <div class="video" data-video="m1" data-title="Videoaula do Módulo 1: O que são deepfakes e por que importam"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 1.]</p></details>
     </section>
 
     <section id="modulo-2" aria-labelledby="t-m2">
@@ -167,6 +186,7 @@ footer a{color:#7FE3EE}
           <li>Agências de checagem e buscas por termos-chave, para checagem cruzada.</li>
         </ul></div>
       <div class="video" data-video="m2" data-title="Videoaula do Módulo 2: Métodos práticos de investigação"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 2.]</p></details>
     </section>
 
     <section id="modulo-3" aria-labelledby="t-m3">
@@ -174,6 +194,7 @@ footer a{color:#7FE3EE}
       <h2 id="t-m3">Limites e armadilhas das ferramentas de verificação</h2>
       <p>Detectores de IA erram, buscas reversas nem sempre encontram a origem e a ausência de sinais não prova autenticidade. Veja como evitar falsas certezas.</p>
       <div class="video" data-video="m3" data-title="Videoaula do Módulo 3: Limites e armadilhas das ferramentas de verificação"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 3.]</p></details>
     </section>
 
     <section id="modulo-4" aria-labelledby="t-m4">
@@ -181,6 +202,22 @@ footer a{color:#7FE3EE}
       <h2 id="t-m4">Demonstração prática: analisando um caso real</h2>
       <p>Acompanhe, passo a passo, a análise de um conteúdo sintético de origem conhecida, aplicando tudo o que você viu nos módulos anteriores.</p>
       <div class="video" data-video="m4" data-title="Videoaula do Módulo 4: Demonstração prática com um caso real"></div>
+      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 4.]</p></details>
+    </section>
+
+    <section id="podcast" aria-labelledby="t-eb">
+      <p class="mod-meta">Material complementar 1</p>
+      <h2 id="t-eb">Podcast: Discutindo sobre verificação de de conteúdos na vida real.</h2>
+      <p>Agora, depois de todas as etapas de aprendizado, vem a pergunta: "Como que vamos usar na vida real?".
+         Com isso, chamamos Vitor Barros e Gabriel Germano para um bate-papo!</p>
+      <div class="video" data-video="m5" data-title="Podcast interativo!"></div>
+    </section>
+
+    <section id="jogo" aria-labelledby="t-jg">
+      <p class="mod-meta">Material complementar 2</p>
+      <h2 id="t-jg">Jogo: Detetive de Checagem</h2>
+      <p>Você é o(a) checador(a) de plantão. Em cada partida, o relógio da redação limita seus minutos de investigação. Escolha as ações certas, reúna pistas, carimbe sua decisão e proteja sua reputação. Há combo, níveis, conquistas e um pódio salvo no seu navegador.</p>
+      <p><a class="btn" href="jogo.html">Jogar agora</a></p>
     </section>
 
     <section id="avaliacao" aria-labelledby="t-av">
@@ -198,8 +235,9 @@ footer a{color:#7FE3EE}
 </footer>
 
 <script>
-/* ===== CONFIGURAÇÃO: cole aqui o ID de cada vídeo do YouTube =====
-   Exemplo: para https://youtu.be/AbC123xyz, use "AbC123xyz". */
+/* ===== CONFIGURAÇÃO: cole aqui o ID ou o link do vídeo do YouTube =====
+   Aceita tanto o ID puro ("Cj0--_wb9nQ") quanto o link colado inteiro
+   (https://youtu.be/Cj0--_wb9nQ?si=... ou https://www.youtube.com/watch?v=Cj0--_wb9nQ). */
 const VIDEOS = { m1:"0idvriv2-Vo", m2:"SmuPgqYJOOU", m3:"CFH8paiIK00", m4:"vqRvP-Dg7YM" };
 
 document.querySelectorAll(".video").forEach(el=>{

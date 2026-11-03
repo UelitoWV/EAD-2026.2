@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detetive de Checagem | Jogo do minicurso sobre deepfakes</title>
+<meta name="description" content="Jogo de investigação: gerencie seu tempo, reúna pistas, mantenha sua reputação e suba no pódio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F5F6F8;--white:#fff;--ink:#101828;--muted:#475467;--line:#D0D5DD;--cyan:#00707C;--ok:#0B6E3A;--okbg:#E6F4EC;--bad:#A4262C;--badbg:#FBEAEA;--warn:#7A4B00;--warnbg:#FFF4DB;--sun:#FFD23F;--wa:#DCF8C6;
+--body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;--head:"Lexend",Verdana,system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:1.125rem/1.6 var(--body)}
+h1,h2,h3{font-family:var(--head);line-height:1.2;margin:0 0 .6em}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800}
+h2{font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:800}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0 0 1em;max-width:68ch}
+a{color:var(--cyan);text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 3px var(--sun)}
+.skip{position:absolute;left:.5rem;top:-4rem;background:var(--ink);color:#fff;padding:.7rem 1rem;border-radius:6px;z-index:10}
+.skip:focus{top:.5rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:880px;margin:0 auto;padding:0 1.25rem}
+.top{background:var(--ink);color:#fff;padding:1.3rem 0}
+.top a{color:#7FE3EE}.top p{margin:0 0 .4em;color:#E4E7EC}
+main{padding:1.5rem 0 3rem}
+h2:focus,#fb:focus,main:focus{outline:none}
+.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:clamp(1rem,3vw,2rem)}
+.hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem;margin-bottom:1rem}
+.st{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem;font-size:.95rem}
+.st b{display:block;font:800 1.2rem var(--head)}
+.clock{margin-bottom:1rem;font-weight:700}
+progress{width:100%;height:.9rem;accent-color:var(--cyan)}
+.chat{background:#E9EEF3;border-radius:10px;padding:.8rem}
+.chat small{display:block;color:var(--muted);font-weight:700;margin-bottom:.4rem}
+.bub{background:var(--wa);border-radius:4px 14px 14px 14px;padding:.8rem 1rem;max-width:62ch;box-shadow:0 1px 1px rgba(0,0,0,.15)}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:2px solid var(--ink);border-radius:6px;padding:.7rem 1.1rem;font:700 1rem var(--body);text-decoration:none;cursor:pointer;min-height:48px}
+.btn:hover:not(:disabled){background:var(--cyan);border-color:var(--cyan);color:#fff}
+.btn.alt{background:transparent;color:var(--ink)}
+.btn.alt:hover:not(:disabled){background:var(--ink);border-color:var(--ink)}
+.btn:disabled{background:#E4E7EC;border-color:#E4E7EC;color:#475467;cursor:not-allowed}
+.grid,.dec{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:1rem}
+.act small{display:block;font-weight:400}
+.stamp{font-family:var(--head);text-transform:uppercase;letter-spacing:.03em;border-width:3px}
+#log{list-style:none;margin:0 0 1.2rem;padding:0;display:grid;gap:.6rem}
+#log li{border:2px solid var(--line);border-radius:8px;padding:.6rem 1rem;background:#FFFEF5}
+#log .tag{display:inline-block;font-weight:700;font-size:.9rem;padding:.1rem .5rem;border-radius:4px;margin-right:.4rem}
+.t-chave{border-color:var(--ok)!important}.t-chave .tag{background:var(--okbg);color:var(--ok)}
+.t-ind .tag{background:var(--warnbg);color:var(--warn)}.t-fraca .tag{background:#EAECF0;color:var(--muted)}
+#log p{margin:.3rem 0 0}
+#fb{border-radius:8px;margin-bottom:1rem}#fb:empty{display:none}
+#fb.ok{background:var(--okbg);border:2px solid var(--ok);padding:1rem}
+#fb.bad{background:var(--badbg);border:2px solid var(--bad);padding:1rem}
+#fb.mid{background:var(--warnbg);border:2px solid var(--warn);padding:1rem}
+#fb p{margin:0 0 .6em}#fb p:last-child{margin:0}
+.big{font:800 2.6rem var(--head);margin:.2rem 0}
+.pod{padding-left:1.4rem;max-width:420px}.pod li{padding:.25rem 0;border-bottom:1px solid var(--line)}
+.pod .me{background:var(--warnbg);font-weight:700}
+.badges{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.badges li{border:2px solid var(--ok);background:var(--okbg);border-radius:20px;padding:.2rem .8rem;font-weight:700;font-size:.95rem}
+.badges li.off{border-color:var(--line);background:var(--paper);color:var(--muted);font-weight:400}
+label{font-weight:700;display:block;margin-bottom:.3rem}
+input[type=text]{font:inherit;padding:.6rem .8rem;border:2px solid var(--ink);border-radius:6px;width:100%;max-width:320px;margin-bottom:1rem}
+.note{color:var(--muted);font-size:1rem}
+
+/* ===== Paleta expandida (cada cor tem um papel; textos continuam presentes) ===== */
+:root{--teal:#00707C;--mag:#B4235A;--vio:#5B3FA8;--amb:#B45309}
+.top{background:linear-gradient(120deg,#101828 0%,#2B1B5E 100%);border-top:6px solid transparent;border-image:linear-gradient(90deg,var(--teal),var(--mag),var(--vio),var(--amb)) 1}
+.st{border-top:4px solid var(--c,var(--line))}
+.st:nth-child(1){--c:var(--teal)}.st:nth-child(2){--c:var(--mag)}.st:nth-child(3){--c:var(--amb)}.st:nth-child(4){--c:var(--vio)}.st:nth-child(5){--c:var(--ink)}
+.st:nth-child(2) b{color:var(--mag)}.st:nth-child(3) b{color:var(--amb)}.st:nth-child(4) b{color:var(--vio)}
+progress{accent-color:var(--amb)}
+.chat{background:#E8E4F7;border:1px solid #CFC7EE}
+.act:nth-child(1){--c:var(--teal)}.act:nth-child(2){--c:var(--vio)}.act:nth-child(3){--c:var(--mag)}.act:nth-child(4){--c:var(--amb)}.act:nth-child(5){--c:#1F2A44}
+.act{border-color:var(--c);color:var(--c)}
+.act:hover:not(:disabled){background:var(--c)!important;border-color:var(--c)!important;color:#fff!important}
+.act:disabled{color:#475467;border-color:#E4E7EC}
+.dbtn[data-d=sim]:not(:disabled){background:var(--ok);border-color:var(--ok)}
+.dbtn[data-d=nao]:not(:disabled){background:var(--bad);border-color:var(--bad)}
+.dbtn[data-d=mais]:not(:disabled){background:var(--warn);border-color:var(--warn)}
+.dbtn:hover:not(:disabled){filter:brightness(1.2)}
+#log li{border-left-width:6px}
+.t-i{border-left-color:var(--amb)!important}.t-f{border-left-color:#98A2B3!important}
+.t-chave{border-left-color:var(--ok)!important}
+.badges li:not(.off){border-color:var(--vio);background:#EEEAFB;color:#3B2A7A}
+h2{color:var(--vio)}
+.pic{display:block;max-width:100%;max-height:340px;height:auto;border-radius:8px;margin-bottom:.6rem}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#jogo">Ir para o jogo</a>
+<header class="top"><div class="wrap">
+  <p><a href="index.html#jogo">← Voltar ao minicurso</a></p>
+  <h1>Detetive de Checagem</h1>
+  <p>Plantão na redação: o relógio corre, sua reputação está em jogo.</p>
+</div></header>
+<main id="jogo" class="wrap" tabindex="-1"><div id="game" class="card"><noscript>Ative o JavaScript no navegador para jogar.</noscript></div><p class="sr" id="live" aria-live="polite"></p></main>
+
+<script>
+/* ===== CASOS (edite à vontade). a = 5 ações na ordem: [Observar, Busca reversa, Fonte, Agências, extra].
+   Imagem opcional: img:"img/enchente.jpg", alt:"descrição do que se vê". Tipo: "c" = pista forte, "i" = indício, "f" = inconclusiva. ok: "sim" | "nao" | "mais". ===== */
+const POOL=[
+{t:"O áudio do “novo número”",d:"WhatsApp · número desconhecido",
+ m:"“Oi, troquei de número e meu cartão bloqueou. Preciso pagar uma conta hoje, faz um Pix pra mim? Depois explico, mas não conta pra ninguém.” (áudio com a voz da sua tia)",
+ x:"Ligar para o número antigo da tia",
+ a:[["A voz lembra a da sua tia, mas o ritmo é robótico e não há ruído de fundo. O pedido junta urgência, dinheiro e sigilo.","i"],["Busca reversa não funciona com áudio privado. Nada encontrado, e isso não prova nada.","f"],["Número desconhecido, com foto de perfil copiada das redes da sua tia e criado hoje.","i"],["Agências alertam para o “golpe do novo número” e para vozes clonadas com poucos segundos de áudio.","i"],["Ela atende e diz que não mandou nada: o celular está com ela. Confirmação por outro canal.","c"]],
+ ok:"nao",w:"Voz clonada engana, e semelhança não prova nada. Confirmar por um canal independente resolve."},
+{t:"A foto da enchente",img:"img/enchente.svg",alt:"Ilustração de uma avenida alagada, com dois carros parcialmente na água e prédios ao fundo",d:"Rede social · perfil sem histórico",
+ m:"Foto de uma avenida alagada: “aconteceu hoje na nossa cidade!”. Pede doações para uma conta pessoal e já foi encaminhada várias vezes.",
+ x:"Usar um detector de IA",
+ a:[["Carros e placas parecem de outro país. Um letreiro ao fundo está ilegível.","i"],["A mesma foto aparece em um site de notícias de 2019, de outro país. A legenda é falsa.","c"],["Perfil sem histórico, que pede doações para conta pessoal.","i"],["Nenhuma checagem sobre o caso, e nenhum veículo local noticia enchente hoje.","f"],["“98% de chance de ser real”. Só diz que não parece IA, não informa quando nem onde foi feita.","f"]],
+ ok:"nao",w:"A imagem é real, mas está fora de contexto. Desinformação nem sempre usa IA: reaproveitar foto antiga é comum."},
+{t:"A ponte que cedeu",img:"img/ponte.svg",alt:"Ilustração de uma ponte com um trecho do tabuleiro caído sobre um rio",d:"Rede social · muito compartilhada",
+ m:"Foto de uma ponte parcialmente destruída: “a ponte da estrada cedeu hoje”. Muita gente compartilha sem comentar.",
+ x:"Usar um detector de IA",
+ a:[["Nada estranho: sombras e textos coerentes. Isso, sozinho, não prova autenticidade.","i"],["A primeira publicação é de hoje, no perfil da Defesa Civil, com o mesmo local e data.","c"],["Perfil oficial e verificado da Defesa Civil, com histórico de avisos.","c"],["Nenhuma checagem, o que é normal: ninguém checa o que não é suspeito.","f"],["Resultado: “inconclusivo”.","f"]],
+ ok:"sim",w:"Duvidar de tudo também é erro. Origem e data confirmadas por fonte oficial. Ao repassar, cite a fonte."},
+{t:"O print sem fonte",d:"Grupo de mensagens · encaminhada",
+ m:"Print de uma suposta declaração polêmica de um prefeito, sem link da fonte original. Milhares de compartilhamentos e muita indignação.",
+ x:"Usar um detector de IA",
+ a:[["Imagem de baixa qualidade, recortada, sem data nem nome do veículo.","i"],["Nenhum resultado anterior. Isso não prova que é falso: pode ser recente ou de grupo fechado.","f"],["Conta nova, poucos seguidores, sem citar fonte.","i"],["Ainda não há checagem publicada sobre esse print.","f"],["“52%, inconclusivo”. Sem utilidade.","f"]],
+ ok:"mais",p:"nao",w:"As evidências não bastam para confirmar nem descartar. O responsável é não repassar por ora e buscar a fonte original. “Não achei nada” não é “é falso”."},
+{t:"O famoso que recomenda investimento",d:"Anúncio em vídeo · rede social",
+ m:"Um apresentador conhecido, em vídeo, garante: “Com R$ 250 você terá retorno de 10 vezes em uma semana”. Há um link para uma “corretora”.",
+ x:"Usar um detector de IA",
+ a:[["A boca não sincroniza bem com a fala e a voz soa levemente metálica.","i"],["Os quadros vêm de uma entrevista de 2022 no canal oficial do apresentador, sem essa fala.","c"],["Conta de anúncio criada há dias. O link leva a um site de corretora sem registro.","i"],["Agências alertam para anúncios falsos com deepfakes de famosos prometendo lucro rápido.","i"],["“70% de chance de ser sintético”. Serve como indício, não como prova.","i"]],
+ ok:"nao",w:"Promessa de lucro fácil, vídeo reaproveitado e fala alterada: golpe com deepfake de rosto conhecido."},
+{t:"A foto “gerada por IA” que é real",d:"Comentários · alegação sem prova",
+ m:"Foto de um evento público publicada por um veículo. Um perfil comenta: “Isso é IA, tudo mentira!”, e muita gente concorda.",
+ x:"Usar um detector de IA",
+ a:[["A foto parece “lisa” e artificial, mas é uma imagem comprimida de ângulo incomum.","i"],["Publicada hoje por uma agência de fotojornalismo, com crédito ao fotógrafo e legenda completa.","c"],["O perfil acusador costuma negar fatos sem apresentar prova alguma.","i"],["Outros fotógrafos publicaram imagens do mesmo evento, de ângulos diferentes.","c"],["“60% IA”. Detectores também erram em fotos reais.","f"]],
+ ok:"sim",w:"Dizer “é IA” sem prova também é desinformação, o chamado dividendo do mentiroso. Várias fontes independentes confirmam o evento."},
+{t:"A videochamada com o “chefe”",d:"Videochamada · convite de contato novo",
+ m:"Seu chefe aparece em vídeo, com a câmera “ruim”, e pede: “Preciso que você faça uma transferência urgente para um fornecedor. É confidencial, não fale com ninguém do financeiro.”",
+ x:"Confirmar com o chefe pelo canal interno",
+ a:[["O rosto fica borrado nas bordas quando ele vira a cabeça, e o vídeo trava sempre que ele pisca.","i"],["Busca reversa não se aplica a uma chamada ao vivo. Nada a encontrar.","f"],["O convite veio de um e-mail pessoal, e não do endereço corporativo.","i"],["Agências e órgãos de segurança alertam para golpes com deepfake de chefes em videochamadas.","i"],["Pelo canal interno, o chefe responde que está em reunião e não pediu nada disso.","c"]],
+ ok:"nao",w:"Deepfakes já funcionam em videochamadas. Urgência, sigilo e dinheiro são o sinal de alerta, e a confirmação por outro canal resolve."},
+{t:"A manchete chocante",img:"img/manchete.svg",alt:"Ilustração do print de um portal de notícias fictício com uma manchete em destaque",d:"Rede social · print de portal de notícias",
+ m:"Print de uma manchete de um portal conhecido: “Governo anuncia confisco de poupança a partir de segunda”. Está sendo compartilhado com pânico.",
+ x:"Usar um detector de IA",
+ a:[["A fonte da letra da manchete é diferente da usada pelo portal, e o alinhamento está estranho.","i"],["O print não aparece em nenhuma busca anterior. Isso não prova nada.","f"],["Abrir o site oficial do portal: não existe matéria com esse título, nem nas últimas horas.","c"],["Agências já checaram: é um print editado que circula com manchetes diferentes.","c"],["Resultado: “inconclusivo”. Detectores de IA não analisam print de texto.","f"]],
+ ok:"nao",w:"Nem todo conteúdo falso é deepfake: um print editado engana bastante. Ir à fonte oficial é a forma mais rápida de checar."},
+{t:"O tubarão na rua alagada",img:"img/tubarao.svg",alt:"Ilustração de uma rua alagada com prédios ao fundo e um tubarão na água",d:"Rede social · foto viral",
+ m:"Foto de um tubarão nadando numa rua alagada depois da chuva: “inacreditável, acabou de acontecer na minha cidade!”.",
+ x:"Usar um detector de IA",
+ a:[["Há um reflexo ausente na água e as proporções do animal parecem erradas para a cena.","i"],["A mesma rua aparece em outra foto, sem tubarão, publicada antes. A imagem é uma montagem.","c"],["Perfil de humor, que costuma postar imagens editadas.","i"],["Agências já desmentiram montagens parecidas, que reaparecem a cada enchente.","c"],["“85% de chance de ter sido manipulada”. Serve como indício.","i"]],
+ ok:"nao",w:"Montagens recicladas reaparecem a cada enchente. A busca reversa achou a imagem original, sem o tubarão."},
+{t:"O áudio vazado da diretoria",d:"Grupo de mensagens · áudio anônimo",
+ m:"Um áudio mostra a voz de um diretor de uma empresa dizendo que vai “demitir todo mundo na sexta”. Foi enviado por alguém que não se identifica.",
+ x:"Procurar posicionamento oficial",
+ a:[["Qualidade ruim, com ruído, e a fala é curta e sem contexto.","i"],["Busca reversa não funciona bem com áudio. Nada encontrado.","f"],["O áudio apareceu primeiro em um grupo anônimo, sem origem identificada.","i"],["Ainda não há checagem publicada sobre esse áudio.","f"],["A empresa ainda não se manifestou, e nenhuma imprensa publicou o caso.","f"]],
+ ok:"mais",p:"nao",w:"Áudio sem origem e sem contexto não dá para confirmar nem descartar. Não repasse, aguarde o posicionamento oficial e fontes independentes."},
+{t:"O discurso do prefeito",d:"Rede social · “isso é deepfake!”",
+ m:"Um vídeo mostra o prefeito anunciando uma obra. Vários comentários dizem: “deepfake, ele nunca disse isso!”, mas ninguém mostra prova.",
+ x:"Usar um detector de IA",
+ a:[["Nada estranho no vídeo: rosto, voz e luz são consistentes.","i"],["O vídeo é um trecho da transmissão ao vivo do canal oficial da prefeitura.","c"],["O canal é oficial e verificado, e a TV local noticiou o mesmo anúncio.","c"],["Nenhuma checagem, o que é normal: não há motivo para suspeita.","f"],["“55%, inconclusivo”.","f"]],
+ ok:"sim",w:"Chamar de deepfake sem prova também engana. A origem oficial e a cobertura independente confirmam o vídeo."},
+{t:"A “especialista” do remédio milagroso",img:"img/doutora.svg",alt:"Ilustração do perfil de uma mulher de jaleco branco, em um fundo desfocado",d:"Rede social · perfil de “doutora”",
+ m:"Uma “doutora” em foto de perfil impecável recomenda um suplemento que “cura diabetes em 7 dias” e pede que você compartilhe com quem ama.",
+ x:"Procurar o registro profissional no conselho",
+ a:[["Os brincos são assimétricos e o fundo da foto tem formas borradas e sem sentido.","i"],["A foto não aparece em nenhum outro lugar na internet.","i"],["A conta tem poucas semanas, e outras contas postam o mesmo texto igual.","c"],["Agências alertam para perfis falsos com rostos gerados por IA vendendo suplementos.","i"],["Nenhum registro profissional com esse nome no conselho da área.","c"]],
+ ok:"nao",w:"Rostos gerados por IA dão falsa credibilidade. Promessa de cura rápida, perfil novo e sem registro profissional formam um golpe."}];
+const LBL=["Observar com atenção","Busca reversa","Investigar a fonte","Consultar agências"],COST=[5,10,10,15,10],BUD=30,N=4;
+const TAG={c:"Pista forte",i:"Indício",f:"Inconclusivo"},DEC={sim:"Confiar e repassar",nao:"Não repassar",mais:"Investigar mais"};
+const LV=[[0,"Estagiário(a)"],[300,"Repórter"],[600,"Checador(a)"],[900,"Editor(a)-chefe"]];
+const BD=["Olho clínico","Anti-paranoia","Cético com método","Combo triplo","Reputação intacta"];
+const BDD={"Olho clínico":"achou pista forte em todo caso que tinha uma","Anti-paranoia":"confiou num conteúdo verdadeiro","Cético com método":"soube investigar mais","Combo triplo":"3 acertos seguidos","Reputação intacta":"terminou sem perder reputação"};
+const g=document.getElementById("game"),live=t=>document.getElementById("live").textContent=t;
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const lvl=s=>LV.filter(l=>s>=l[0]).pop()[1],esc=s=>s.replace(/[<>&]/g,"");
+let S;
+const foc=id=>{const e=document.getElementById(id||"h");if(e)e.focus()};
+
+function intro(){
+  const pod=ld("dc_pod",[]);
+  g.innerHTML=`<h2 id="h" tabindex="-1">Plantão na redação</h2>
+  <p>Você tem <strong>${N} casos</strong> por partida, sorteados entre ${POOL.length}. Em cada um, o relógio marca <strong>${BUD} minutos</strong>: cada ação de investigação gasta tempo (5 a 15 min). Gaste com inteligência.</p>
+  <p>Depois, carimbe a decisão. <strong>Acertar</strong> vale 100 pontos mais 3 por minuto que sobrar, multiplicados pelo <strong>combo</strong> (até x3). <strong>Errar</strong> custa 1 de 3 pontos de <strong>reputação</strong> e zera o combo. Sem reputação, o plantão acaba.</p>
+  <label for="nick">Seu apelido para o pódio (não use seu nome real)</label>
+  <input type="text" id="nick" maxlength="16" autocomplete="off" value="${esc(ld("dc_nick",""))}">
+  <div><button class="btn" id="go" type="button">Começar o plantão</button></div>
+  <h3 style="margin-top:1.5rem">Pódio neste navegador</h3>${podHtml(pod,-1)}
+  <p class="note">Casos fictícios, para fins didáticos. O pódio fica salvo só neste aparelho.</p>`;
+  document.getElementById("go").onclick=()=>{const n=esc(document.getElementById("nick").value.trim())||"Anônimo(a)";sv("dc_nick",n);start(n)};
+}
+function podHtml(p,hl){return p.length?`<ol class="pod">${p.map((r,k)=>`<li${k===hl?' class="me"':""}>${esc(r.n)}: ${r.s} pts (${lvl(r.s)})</li>`).join("")}</ol>`:`<p class="note">Ainda sem resultados. Seja o(a) primeiro(a)!</p>`}
+
+function start(n){
+  const q=POOL.map(c=>[Math.random(),c]).sort((a,b)=>a[0]-b[0]).slice(0,N).map(x=>x[1]);
+  S={n,q,i:0,sc:0,hp:3,cb:1,got:new Set(),key:true,ok:0};caso();foc();
+}
+function hud(){return `<div class="hud"><div class="st">Caso<b>${S.i+1}/${N}</b></div><div class="st">Reputação<b aria-label="Reputação: ${S.hp} de 3">${"♥".repeat(S.hp)}${"♡".repeat(3-S.hp)}</b></div><div class="st">Combo<b>x${S.cb}</b></div><div class="st">Pontos<b>${S.sc}</b></div><div class="st">Nível<b style="font-size:1rem">${lvl(S.sc)}</b></div></div>`}
+
+function caso(){
+  const c=S.q[S.i];S.u=[];S.m=BUD;S.dn=false;
+  g.innerHTML=`${hud()}<h2 id="h" tabindex="-1">${c.t}</h2>
+  <div class="chat"><small>${c.d}</small><div class="bub">${c.img?`<img class="pic" src="${c.img}" alt="${c.alt||""}" loading="lazy" onerror="this.remove()">`:""}${c.m}</div></div>
+  <div class="clock" style="margin:1rem 0 .6rem"><label for="clk" style="margin:0">Relógio da redação: <span id="mt">${BUD} min restantes</span></label><progress id="clk" max="${BUD}" value="${BUD}"></progress></div>
+  <div class="grid">${[...LBL,c.x].map((l,k)=>`<button class="btn alt act" type="button" data-k="${k}">${l}<small>${COST[k]} min</small></button>`).join("")}</div>
+  <ul id="log" aria-label="Pistas encontradas"></ul>
+  <h3>Carimbe sua decisão</h3>
+  <div class="dec">${Object.entries(DEC).map(([k,v])=>`<button class="btn stamp dbtn" type="button" data-d="${k}" disabled>${v}</button>`).join("")}</div>
+  <p class="note" id="hint">Faça ao menos uma investigação para liberar o carimbo.</p><div id="fb" tabindex="-1"></div>`;
+  g.querySelectorAll(".act").forEach(b=>b.onclick=()=>act(+b.dataset.k,b));
+  g.querySelectorAll(".dbtn").forEach(b=>b.onclick=()=>decide(b.dataset.d));
+  sync();
+}
+function sync(){g.querySelectorAll(".act").forEach(b=>{const k=+b.dataset.k;b.disabled=S.dn||S.u.includes(k)||COST[k]>S.m})}
+function act(k){
+  if(S.dn||S.u.includes(k)||COST[k]>S.m)return;
+  S.u.push(k);S.m-=COST[k];const c=S.q[S.i],a=c.a[k];
+  const li=document.createElement("li");li.className="t-"+a[1];
+  li.innerHTML=`<span class="tag">${TAG[a[1]]}</span><b>${[...LBL,c.x][k]}</b><p>${a[0]}</p>`;
+  document.getElementById("log").appendChild(li);
+  document.getElementById("mt").textContent=S.m+" min restantes";document.getElementById("clk").value=S.m;
+  g.querySelectorAll(".dbtn").forEach(b=>b.disabled=false);document.getElementById("hint").textContent="";
+  live(`${TAG[a[1]]}: ${a[0]} Restam ${S.m} minutos.`);sync();
+}
+function decide(d){
+  if(S.dn)return;S.dn=true;const c=S.q[S.i];let pts=0,cls="bad",head="Erro de julgamento.";
+  const had=c.a.some(a=>a[1]==="c"),found=S.u.some(k=>c.a[k][1]==="c");
+  if(had&&!found)S.key=false;
+  const old=lvl(S.sc);
+  if(d===c.ok){pts=(100+3*S.m)*S.cb;cls="ok";head="Decisão certeira!";S.ok++;if(S.cb===3)S.got.add("Combo triplo");S.cb=Math.min(3,S.cb+1);if(c.ok==="sim")S.got.add("Anti-paranoia");if(c.ok==="mais")S.got.add("Cético com método")}
+  else if(d===c.p){pts=40;cls="mid";head="Decisão parcialmente adequada.";S.cb=1}
+  else{S.hp--;S.cb=1}
+  S.sc+=pts;g.querySelectorAll(".act,.dbtn").forEach(b=>b.disabled=true);
+  const miss=c.a.map((a,k)=>[a,k]).filter(([a,k])=>a[1]==="c"&&!S.u.includes(k)).map(([a,k])=>[...LBL,c.x][k]);
+  const up=lvl(S.sc)!==old?`<p><strong>Subiu de nível: ${lvl(S.sc)}!</strong></p>`:"";
+  const fin=S.hp<=0||S.i+1>=N;
+  const fb=document.getElementById("fb");fb.className=cls;
+  fb.innerHTML=`<p><strong>${head}</strong> “${DEC[d]}”: +${pts} pontos.${S.hp<=0?" Sua reputação acabou.":""}</p>${d!==c.ok?`<p><strong>Mais adequado:</strong> “${DEC[c.ok]}”.</p>`:""}<p>${c.w}</p>${miss.length?`<p><strong>Pista forte que você não buscou:</strong> ${miss.join("; ")}.</p>`:""}${up}<button class="btn" id="nx" type="button">${fin?"Ver resultado":"Próximo caso"}</button>`;
+  document.getElementById("nx").onclick=()=>{if(fin)fim();else{S.i++;caso();foc()}};
+  fb.focus();
+}
+function fim(){
+  if(S.hp===3&&S.ok===S.q.length)S.got.add("Reputação intacta");if(S.key)S.got.add("Olho clínico");
+  const all=ld("dc_bd",[]);S.got.forEach(b=>{if(!all.includes(b))all.push(b)});sv("dc_bd",all);
+  const pod=ld("dc_pod",[]);const me={n:S.n,s:S.sc};pod.push(me);pod.sort((a,b)=>b.s-a.s);const pos=pod.indexOf(me);pod.splice(5);sv("dc_pod",pod);
+  g.innerHTML=`<h2 id="h" tabindex="-1">${S.hp>0?"Plantão encerrado":"Fim de jogo: reputação esgotada"}</h2>
+  <p class="big">${S.sc} pontos</p><p><strong>Nível: ${lvl(S.sc)}</strong> · ${S.ok} de ${S.q.length} decisões certeiras</p>
+  <h3>Conquistas</h3><ul class="badges">${BD.map(b=>`<li class="${S.got.has(b)?"":"off"}">${b}${S.got.has(b)?" (nesta partida)":all.includes(b)?" (já conquistada)":" (bloqueada)"}: ${BDD[b]}</li>`).join("")}</ul>
+  <h3>Pódio neste navegador</h3>${pos>=0&&pos<5?`<p>Você ficou em <strong>${pos+1}º lugar</strong>.</p>`:`<p>Você não entrou no top 5 desta vez.</p>`}${podHtml(pod,pos)}
+  <button class="btn" id="again" type="button">Jogar de novo</button>
+  <a class="btn alt" href="index.html#modulo-1">Rever os módulos</a>
+  <a class="btn alt" href="index.html#avaliacao">Ir para a avaliação</a>`;
+  document.getElementById("again").onclick=()=>{intro();foc()};foc();
+}
+intro();
+</script>
+</body>
+</html>
