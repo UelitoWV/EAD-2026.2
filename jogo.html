@@ -64,6 +64,7 @@ progress{width:100%;height:.9rem;accent-color:var(--cyan)}
 .badges li.off{border-color:var(--line);background:var(--paper);color:var(--muted);font-weight:400}
 label{font-weight:700;display:block;margin-bottom:.3rem}
 input[type=text]{font:inherit;padding:.6rem .8rem;border:2px solid var(--ink);border-radius:6px;width:100%;max-width:320px;margin-bottom:1rem}
+.tk{font-size:1.4rem;color:var(--amb);letter-spacing:.15em;margin-left:.6rem}
 .note{color:var(--muted);font-size:1rem}
 
 /* ===== Paleta expandida (cada cor tem um papel; textos continuam presentes) ===== */
@@ -96,7 +97,7 @@ h2{color:var(--vio)}
 <header class="top"><div class="wrap">
   <p><a href="index.html#jogo">← Voltar ao minicurso</a></p>
   <h1>Detetive de Checagem</h1>
-  <p>Plantão na redação: o relógio corre, sua reputação está em jogo.</p>
+  <p>Plantão na redação: use bem suas fichas, sua reputação está em jogo.</p>
 </div></header>
 <main id="jogo" class="wrap" tabindex="-1"><div id="game" class="card"><noscript>Ative o JavaScript no navegador para jogar.</noscript></div><p class="sr" id="live" aria-live="polite"></p></main>
 
@@ -164,34 +165,41 @@ const POOL=[
  x:"Procurar o registro profissional no conselho",
  a:[["Os brincos são assimétricos e o fundo da foto tem formas borradas e sem sentido.","i"],["A foto não aparece em nenhum outro lugar na internet.","i"],["A conta tem poucas semanas, e outras contas postam o mesmo texto igual.","c"],["Agências alertam para perfis falsos com rostos gerados por IA vendendo suplementos.","i"],["Nenhum registro profissional com esse nome no conselho da área.","c"]],
  ok:"nao",w:"Rostos gerados por IA dão falsa credibilidade. Promessa de cura rápida, perfil novo e sem registro profissional formam um golpe."}];
-const LBL=["Observar com atenção","Busca reversa","Investigar a fonte","Consultar agências"],COST=[5,10,10,15,10],BUD=30,N=4;
+const LBL=["Observar com atenção","Busca reversa","Investigar a fonte","Consultar agências"],COST=[1,2,2,3,2],BUD=6,N=4;
 const TAG={c:"Pista forte",i:"Indício",f:"Inconclusivo"},DEC={sim:"Confiar e repassar",nao:"Não repassar",mais:"Investigar mais"};
 const LV=[[0,"Estagiário(a)"],[300,"Repórter"],[600,"Checador(a)"],[900,"Editor(a)-chefe"]];
 const BD=["Olho clínico","Anti-paranoia","Cético com método","Combo triplo","Reputação intacta"];
 const BDD={"Olho clínico":"achou pista forte em todo caso que tinha uma","Anti-paranoia":"confiou num conteúdo verdadeiro","Cético com método":"soube investigar mais","Combo triplo":"3 acertos seguidos","Reputação intacta":"terminou sem perder reputação"};
 const g=document.getElementById("game"),live=t=>document.getElementById("live").textContent=t;
 const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-const lvl=s=>LV.filter(l=>s>=l[0]).pop()[1],esc=s=>s.replace(/[<>&]/g,"");
+const lvl=s=>LV.filter(l=>s>=l[0]).pop()[1],esc=s=>String(s).replace(/[<>&"']/g,"");
+const fch=n=>"●".repeat(n)+"○".repeat(BUD-n);
+const API="/api/ranking";
+async function rk(m,body){const c=new AbortController(),t=setTimeout(()=>c.abort(),6000);try{const r=await fetch(API,{method:m,headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined,signal:c.signal});const j=await r.json();return j.top||null}catch(e){return null}finally{clearTimeout(t)}}
+function gHtml(t,me){let u=0;return t?(t.length?`<ol class="pod">${t.map(r=>{const h=me&&!u&&r.n===me.n&&r.s===me.s;if(h)u=1;return `<li${h?' class="me"':""}>${esc(r.n)}: ${r.s} pts (${lvl(r.s)})</li>`}).join("")}</ol>`:'<p class="note">Ainda sem resultados globais. Seja o(a) primeiro(a)!</p>'):'<p class="note">Pódio global indisponível agora. Ele funciona no site publicado, com conexão à internet.</p>'}
 let S;
 const foc=id=>{const e=document.getElementById(id||"h");if(e)e.focus()};
 
 function intro(){
   const pod=ld("dc_pod",[]);
   g.innerHTML=`<h2 id="h" tabindex="-1">Plantão na redação</h2>
-  <p>Você tem <strong>${N} casos</strong> por partida, sorteados entre ${POOL.length}. Em cada um, o relógio marca <strong>${BUD} minutos</strong>: cada ação de investigação gasta tempo (5 a 15 min). Gaste com inteligência.</p>
-  <p>Depois, carimbe a decisão. <strong>Acertar</strong> vale 100 pontos mais 3 por minuto que sobrar, multiplicados pelo <strong>combo</strong> (até x3). <strong>Errar</strong> custa 1 de 3 pontos de <strong>reputação</strong> e zera o combo. Sem reputação, o plantão acaba.</p>
+  <p>Você tem <strong>${N} casos</strong> por partida, sorteados entre ${POOL.length}. Em cada um você recebe <strong>${BUD} fichas de investigação</strong>, e cada ação gasta de 1 a 3 fichas. <strong>Não há cronômetro:</strong> o jogo só avança quando você age. Gaste as fichas com inteligência.</p>
+  <p>Depois, carimbe a decisão. <strong>Acertar</strong> vale 100 pontos mais 15 por ficha que sobrar, multiplicados pelo <strong>combo</strong> (até x3). <strong>Errar</strong> custa 1 de 3 pontos de <strong>reputação</strong> e zera o combo. Sem reputação, o plantão acaba.</p>
   <label for="nick">Seu apelido para o pódio (não use seu nome real)</label>
   <input type="text" id="nick" maxlength="16" autocomplete="off" value="${esc(ld("dc_nick",""))}">
+  <label style="font-weight:400;display:flex;gap:.6rem;align-items:center;margin-bottom:1rem"><input type="checkbox" id="pub" checked style="width:1.2rem;height:1.2rem"> Mostrar meu apelido e minha pontuação no pódio global (público)</label>
   <div><button class="btn" id="go" type="button">Começar o plantão</button></div>
-  <h3 style="margin-top:1.5rem">Pódio neste navegador</h3>${podHtml(pod,-1)}
-  <p class="note">Casos fictícios, para fins didáticos. O pódio fica salvo só neste aparelho.</p>`;
-  document.getElementById("go").onclick=()=>{const n=esc(document.getElementById("nick").value.trim())||"Anônimo(a)";sv("dc_nick",n);start(n)};
+  <h3 style="margin-top:1.5rem">Pódio global (todos os jogadores)</h3><div id="gp" aria-live="polite"><p class="note">Carregando pódio global…</p></div>
+  <h3>Seus melhores resultados neste aparelho</h3>${podHtml(pod,-1)}
+  <p class="note">Casos fictícios, para fins didáticos. Apelidos do pódio global são públicos: não use seu nome real.</p>`;
+  rk("GET").then(t=>{const e=document.getElementById("gp");if(e)e.innerHTML=gHtml(t)});
+  document.getElementById("go").onclick=()=>{const n=esc(document.getElementById("nick").value.trim())||"Anônimo(a)";sv("dc_nick",n);start(n,document.getElementById("pub").checked)};
 }
 function podHtml(p,hl){return p.length?`<ol class="pod">${p.map((r,k)=>`<li${k===hl?' class="me"':""}>${esc(r.n)}: ${r.s} pts (${lvl(r.s)})</li>`).join("")}</ol>`:`<p class="note">Ainda sem resultados. Seja o(a) primeiro(a)!</p>`}
 
-function start(n){
+function start(n,pub){
   const q=POOL.map(c=>[Math.random(),c]).sort((a,b)=>a[0]-b[0]).slice(0,N).map(x=>x[1]);
-  S={n,q,i:0,sc:0,hp:3,cb:1,got:new Set(),key:true,ok:0};caso();foc();
+  S={n,pub,q,i:0,sc:0,hp:3,cb:1,got:new Set(),key:true,ok:0};caso();foc();
 }
 function hud(){return `<div class="hud"><div class="st">Caso<b>${S.i+1}/${N}</b></div><div class="st">Reputação<b aria-label="Reputação: ${S.hp} de 3">${"♥".repeat(S.hp)}${"♡".repeat(3-S.hp)}</b></div><div class="st">Combo<b>x${S.cb}</b></div><div class="st">Pontos<b>${S.sc}</b></div><div class="st">Nível<b style="font-size:1rem">${lvl(S.sc)}</b></div></div>`}
 
@@ -199,8 +207,8 @@ function caso(){
   const c=S.q[S.i];S.u=[];S.m=BUD;S.dn=false;
   g.innerHTML=`${hud()}<h2 id="h" tabindex="-1">${c.t}</h2>
   <div class="chat"><small>${c.d}</small><div class="bub">${c.img?`<img class="pic" src="${c.img}" alt="${c.alt||""}" loading="lazy" onerror="this.remove()">`:""}${c.m}</div></div>
-  <div class="clock" style="margin:1rem 0 .6rem"><label for="clk" style="margin:0">Relógio da redação: <span id="mt">${BUD} min restantes</span></label><progress id="clk" max="${BUD}" value="${BUD}"></progress></div>
-  <div class="grid">${[...LBL,c.x].map((l,k)=>`<button class="btn alt act" type="button" data-k="${k}">${l}<small>${COST[k]} min</small></button>`).join("")}</div>
+  <div class="clock" style="margin:1rem 0 .6rem"><span id="mt">Fichas de investigação: ${BUD} de ${BUD}</span><span id="tk" class="tk" aria-hidden="true">${fch(BUD)}</span><br><span class="note" style="font-weight:400">Sem cronômetro: o jogo só avança quando você age.</span></div>
+  <div class="grid">${[...LBL,c.x].map((l,k)=>`<button class="btn alt act" type="button" data-k="${k}">${l}<small>${COST[k]} ${COST[k]>1?"fichas":"ficha"}</small></button>`).join("")}</div>
   <ul id="log" aria-label="Pistas encontradas"></ul>
   <h3>Carimbe sua decisão</h3>
   <div class="dec">${Object.entries(DEC).map(([k,v])=>`<button class="btn stamp dbtn" type="button" data-d="${k}" disabled>${v}</button>`).join("")}</div>
@@ -216,16 +224,16 @@ function act(k){
   const li=document.createElement("li");li.className="t-"+a[1];
   li.innerHTML=`<span class="tag">${TAG[a[1]]}</span><b>${[...LBL,c.x][k]}</b><p>${a[0]}</p>`;
   document.getElementById("log").appendChild(li);
-  document.getElementById("mt").textContent=S.m+" min restantes";document.getElementById("clk").value=S.m;
+  document.getElementById("mt").textContent="Fichas de investigação: "+S.m+" de "+BUD;document.getElementById("tk").textContent=fch(S.m);
   g.querySelectorAll(".dbtn").forEach(b=>b.disabled=false);document.getElementById("hint").textContent="";
-  live(`${TAG[a[1]]}: ${a[0]} Restam ${S.m} minutos.`);sync();
+  live(`${TAG[a[1]]}: ${a[0]} Restam ${S.m} fichas.`);sync();
 }
 function decide(d){
   if(S.dn)return;S.dn=true;const c=S.q[S.i];let pts=0,cls="bad",head="Erro de julgamento.";
   const had=c.a.some(a=>a[1]==="c"),found=S.u.some(k=>c.a[k][1]==="c");
   if(had&&!found)S.key=false;
   const old=lvl(S.sc);
-  if(d===c.ok){pts=(100+3*S.m)*S.cb;cls="ok";head="Decisão certeira!";S.ok++;if(S.cb===3)S.got.add("Combo triplo");S.cb=Math.min(3,S.cb+1);if(c.ok==="sim")S.got.add("Anti-paranoia");if(c.ok==="mais")S.got.add("Cético com método")}
+  if(d===c.ok){pts=(100+15*S.m)*S.cb;cls="ok";head="Decisão certeira!";S.ok++;if(S.cb===3)S.got.add("Combo triplo");S.cb=Math.min(3,S.cb+1);if(c.ok==="sim")S.got.add("Anti-paranoia");if(c.ok==="mais")S.got.add("Cético com método")}
   else if(d===c.p){pts=40;cls="mid";head="Decisão parcialmente adequada.";S.cb=1}
   else{S.hp--;S.cb=1}
   S.sc+=pts;g.querySelectorAll(".act,.dbtn").forEach(b=>b.disabled=true);
@@ -244,11 +252,14 @@ function fim(){
   g.innerHTML=`<h2 id="h" tabindex="-1">${S.hp>0?"Plantão encerrado":"Fim de jogo: reputação esgotada"}</h2>
   <p class="big">${S.sc} pontos</p><p><strong>Nível: ${lvl(S.sc)}</strong> · ${S.ok} de ${S.q.length} decisões certeiras</p>
   <h3>Conquistas</h3><ul class="badges">${BD.map(b=>`<li class="${S.got.has(b)?"":"off"}">${b}${S.got.has(b)?" (nesta partida)":all.includes(b)?" (já conquistada)":" (bloqueada)"}: ${BDD[b]}</li>`).join("")}</ul>
-  <h3>Pódio neste navegador</h3>${pos>=0&&pos<5?`<p>Você ficou em <strong>${pos+1}º lugar</strong>.</p>`:`<p>Você não entrou no top 5 desta vez.</p>`}${podHtml(pod,pos)}
+  <h3>Pódio global (todos os jogadores)</h3><div id="gp" aria-live="polite"><p class="note">${S.pub&&S.sc>0?"Enviando sua pontuação…":"Carregando…"}</p></div>
+  <h3>Neste aparelho</h3>${pos>=0&&pos<5?`<p>Você ficou em <strong>${pos+1}º lugar</strong>.</p>`:`<p>Você não entrou no top 5 desta vez.</p>`}${podHtml(pod,pos)}
   <button class="btn" id="again" type="button">Jogar de novo</button>
   <a class="btn alt" href="index.html#modulo-1">Rever os módulos</a>
   <a class="btn alt" href="index.html#avaliacao">Ir para a avaliação</a>`;
   document.getElementById("again").onclick=()=>{intro();foc()};foc();
+  const gm={n:S.n.replace(/[^\p{L}\p{N} ._-]/gu,"").trim().slice(0,16)||"Anônimo(a)",s:S.sc};
+  (S.pub&&S.sc>0?rk("POST",{n:S.n,s:S.sc}):rk("GET")).then(t=>{const e=document.getElementById("gp");if(e)e.innerHTML=(S.pub&&S.sc>0?"":'<p class="note">Sua pontuação não foi enviada ao pódio global.</p>')+gHtml(t,S.pub?gm:null)});
 }
 intro();
 </script>

@@ -112,6 +112,31 @@ footer a{color:#7FE3EE}
 .trail li:nth-child(4) a{border-left-color:var(--vio)}.trail li:nth-child(5) a{border-left-color:var(--amb)}
 .trail li:nth-child(6) a{border-left-color:var(--teal)}.trail li:nth-child(7) a{border-left-color:var(--mag)}.trail li:nth-child(8) a{border-left-color:var(--vio)}
 .btn:hover{background:var(--vio)}
+
+/* ===== Mapa do minicurso (fluxo de estudo) ===== */
+.mapa{background:var(--white);border-bottom:1px solid var(--line);padding:2.5rem 0}
+.mapa h2{color:var(--vio)}
+.flow{list-style:none;margin:1.5rem 0;padding:0;display:grid;gap:2.4rem}
+.fg{background:var(--paper);border:2px solid var(--c);border-radius:10px;padding:1rem;position:relative}
+.fg:not(:last-child)::after{content:"↓";content:"↓"/"";position:absolute;left:50%;bottom:-2.1rem;transform:translateX(-50%);font:800 1.6rem var(--head);color:var(--c)}
+.fh{display:block;font:800 1.15rem var(--head);color:var(--c);margin-bottom:.2rem}
+.fs{display:inline-block;background:var(--c);color:#fff;font-weight:700;font-size:.85rem;padding:.05rem .6rem;border-radius:20px;margin-bottom:.7rem}
+.fg ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.fg li a{display:block;background:var(--white);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:6px;padding:.5rem .8rem;color:var(--ink);text-decoration:none;min-height:44px}
+.fg li a:hover{border-color:var(--c);background:var(--paper)}
+.fg li a b{display:block}.fg li a span{font-size:.95rem;color:var(--muted)}
+.stats{list-style:none;margin:0 0 1rem;padding:0;display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stats li{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.7rem 1rem;border-top:4px solid var(--c,var(--line))}
+.stats b{display:block;font:800 2rem/1.1 var(--head);color:var(--c)}
+.leg{color:var(--muted);font-size:1rem;max-width:none}
+@media(min-width:900px){
+  .flow{grid-template-columns:1.15fr 1fr .8fr;gap:3rem}
+  .fg:not(:last-child)::after{content:"→";content:"→"/"";left:auto;right:-2.3rem;bottom:auto;top:50%;transform:translateY(-50%)}
+}
+.bn{display:block;width:100%;height:64px;color:var(--c);margin-bottom:.4rem}
+.fg li a{display:flex;align-items:center;gap:.8rem}
+.ic{flex:none;width:44px;height:44px;border-radius:10px;background:var(--c);display:grid;place-items:center}
+.tx{flex:1;min-width:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -124,9 +149,43 @@ footer a{color:#7FE3EE}
     <h1>Educação midiática diante de conteúdos sintéticos e deepfakes</h1>
     <p class="lead">Aprenda a desconfiar com método: identificar indícios de manipulação por IA, investigar a origem de imagens e áudios e decidir o que merece confiança.</p>
     <a class="btn" href="#modulo-1">Começar pelo Módulo 1</a>
+    <a class="btn alt" href="#mapa">Ver o mapa do minicurso</a>
     <a class="btn alt" href="#avaliacao">Ir direto à avaliação</a>
   </div>
 </header>
+
+<section class="mapa" id="mapa" aria-labelledby="t-mapa">
+  <div class="wrap">
+    <h2 id="t-mapa">Mapa do minicurso: o que você encontra aqui</h2>
+    <p>O estudo segue um fluxo em três etapas: <strong>aprender</strong> com as videoaulas, <strong>ampliar</strong> com o podcast e o jogo, e <strong>verificar</strong> o que aprendeu na avaliação. Cada item abaixo leva direto à sua seção.</p>
+    <ol class="flow" aria-label="Fluxo de estudo do minicurso">
+      <li class="fg" style="--c:var(--teal)"><svg class="bn" viewBox="0 0 200 60" aria-hidden="true" focusable="false"><rect x="22" y="14" width="38" height="30" rx="5" opacity=".28" fill="currentColor"/><rect x="140" y="14" width="38" height="30" rx="5" opacity=".28" fill="currentColor"/><rect x="64" y="5" width="72" height="44" rx="6" fill="currentColor"/><path d="M92 18l20 9-20 9z" fill="#fff"/><rect x="88" y="52" width="24" height="4" rx="2" fill="currentColor"/></svg><span class="fh">1 · Aprender</span><span class="fs">1ª VA · 4 videoaulas</span>
+        <ul>
+          <li><a href="#sobre"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg></div><div class="tx"><b>Sobre o curso</b><span>Autoria, público-alvo, pré-requisitos e objetivos</span></div></a></li>
+          <li><a href="#modulo-1"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M8 10h.01M16 10h.01M9 16q3 2 6 0"/></svg></div><div class="tx"><b>Módulo 1</b><span>Vídeo: o que são deepfakes e por que importam</span></div></a></li>
+          <li><a href="#modulo-2"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/></svg></div><div class="tx"><b>Módulo 2</b><span>Vídeo: métodos práticos de investigação</span></div></a></li>
+          <li><a href="#modulo-3"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/></svg></div><div class="tx"><b>Módulo 3</b><span>Vídeo: limites das ferramentas de verificação</span></div></a></li>
+          <li><a href="#modulo-4"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h6l2 2h10v11H3z"/></svg></div><div class="tx"><b>Módulo 4</b><span>Vídeo: análise de um caso real</span></div></a></li>
+        </ul></li>
+      <li class="fg" style="--c:var(--mag)"><svg class="bn" viewBox="0 0 200 60" aria-hidden="true" focusable="false"><rect x="46" y="6" width="22" height="34" rx="11" fill="currentColor"/><path d="M40 28a17 17 0 0 0 34 0M57 45v8M48 54h18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="100" y="20" width="64" height="30" rx="15" fill="currentColor"/><path d="M118 28v14M111 35h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="146" cy="31" r="3" fill="#fff"/><circle cx="153" cy="39" r="3" fill="#fff"/></svg><span class="fh">2 · Ampliar</span><span class="fs">2ª VA · novas mídias</span>
+        <ul>
+          <li><a href="#podcast"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></svg></div><div class="tx"><b>Item 1: Podcast</b><span>Bate-papo sobre verificação na vida real, no YouTube</span></div></a></li>
+          <li><a href="#jogo"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10v5M4.5 12.5h5M16 11h.01M19 14h.01"/></svg></div><div class="tx"><b>Item 2: Jogo online</b><span>Detetive de Checagem, com combo, níveis e pódio</span></div></a></li>
+        </ul></li>
+      <li class="fg" style="--c:var(--vio)"><svg class="bn" viewBox="0 0 200 60" aria-hidden="true" focusable="false"><rect x="70" y="4" width="60" height="54" rx="7" fill="currentColor"/><g stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M80 18l4 4 7-7M98 19h24M80 33l4 4 7-7M98 34h24M80 48h10M98 48h24"/></g></svg><span class="fh">3 · Verificar</span><span class="fs">1ª VA · avaliação</span>
+        <ul>
+          <li><a href="#avaliacao"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 9l2 2 3-3M8 16h8"/></svg></div><div class="tx"><b>Avaliação interativa</b><span>5 cenários com feedback explicativo</span></div></a></li>
+        </ul></li>
+    </ol>
+    <ul class="stats" aria-label="O que o minicurso contém, em números">
+      <li style="--c:var(--teal)"><b>4</b>videoaulas com legendas e transcrição</li>
+      <li style="--c:var(--mag)"><b>1</b>podcast hospedado no YouTube</li>
+      <li style="--c:var(--mag)"><b>1</b>jogo online com 12 casos</li>
+      <li style="--c:var(--vio)"><b>5</b>questões na avaliação</li>
+    </ul>
+    <p class="leg">Materiais da 1ª VA: videoaulas e avaliação interativa. Materiais da 2ª VA: podcast (Item 1) e jogo online (Item 2).</p>
+  </div>
+</section>
 
 <div class="wrap layout">
   <nav class="trail" aria-label="Sequência do minicurso">
@@ -163,7 +222,7 @@ footer a{color:#7FE3EE}
               <li>avaliar criticamente a confiabilidade de conteúdos online, cruzando fontes.</li>
             </ul></dd></div>
         <div><dt>Como estudar</dt>
-          <dd>Siga a ordem dos módulos. Cada um tem um vídeo com legendas ativáveis e uma transcrição em texto. No final, responda à avaliação com feedback explicativo em cada questão.</dd></div>
+          <dd>Siga a ordem dos módulos. Cada um tem um vídeo com legendas ativáveis e uma transcrição em texto. Depois, ouça o podcast, jogue o Detetive de Checagem e, por fim, responda à avaliação com feedback explicativo em cada questão. O mapa no topo da página mostra todo o fluxo.</dd></div>
       </dl>
     </section>
 
@@ -172,7 +231,6 @@ footer a{color:#7FE3EE}
       <h2 id="t-m1">O que são deepfakes e por que importam</h2>
       <p>Entenda o que são conteúdos sintéticos, como são produzidos e quais os impactos na política, nas relações pessoais e na confiança pública.</p>
       <div class="video" data-video="m1" data-title="Videoaula do Módulo 1: O que são deepfakes e por que importam"></div>
-      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 1.]</p></details>
     </section>
 
     <section id="modulo-2" aria-labelledby="t-m2">
@@ -186,7 +244,6 @@ footer a{color:#7FE3EE}
           <li>Agências de checagem e buscas por termos-chave, para checagem cruzada.</li>
         </ul></div>
       <div class="video" data-video="m2" data-title="Videoaula do Módulo 2: Métodos práticos de investigação"></div>
-      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 2.]</p></details>
     </section>
 
     <section id="modulo-3" aria-labelledby="t-m3">
@@ -194,7 +251,6 @@ footer a{color:#7FE3EE}
       <h2 id="t-m3">Limites e armadilhas das ferramentas de verificação</h2>
       <p>Detectores de IA erram, buscas reversas nem sempre encontram a origem e a ausência de sinais não prova autenticidade. Veja como evitar falsas certezas.</p>
       <div class="video" data-video="m3" data-title="Videoaula do Módulo 3: Limites e armadilhas das ferramentas de verificação"></div>
-      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 3.]</p></details>
     </section>
 
     <section id="modulo-4" aria-labelledby="t-m4">
@@ -202,12 +258,11 @@ footer a{color:#7FE3EE}
       <h2 id="t-m4">Demonstração prática: analisando um caso real</h2>
       <p>Acompanhe, passo a passo, a análise de um conteúdo sintético de origem conhecida, aplicando tudo o que você viu nos módulos anteriores.</p>
       <div class="video" data-video="m4" data-title="Videoaula do Módulo 4: Demonstração prática com um caso real"></div>
-      <details><summary>Transcrição do vídeo</summary><p>[Cole aqui a transcrição da videoaula do Módulo 4.]</p></details>
     </section>
 
     <section id="podcast" aria-labelledby="t-eb">
       <p class="mod-meta">Material complementar 1</p>
-      <h2 id="t-eb">Podcast: Discutindo sobre verificação de de conteúdos na vida real.</h2>
+      <h2 id="t-eb">Podcast: Discutindo sobre verificação de conteúdos na vida real.</h2>
       <p>Agora, depois de todas as etapas de aprendizado, vem a pergunta: "Como que vamos usar na vida real?".
          Com isso, chamamos Vitor Barros e Gabriel Germano para um bate-papo!</p>
       <div class="video" data-video="m5" data-title="Podcast interativo!"></div>
@@ -216,7 +271,7 @@ footer a{color:#7FE3EE}
     <section id="jogo" aria-labelledby="t-jg">
       <p class="mod-meta">Material complementar 2</p>
       <h2 id="t-jg">Jogo: Detetive de Checagem</h2>
-      <p>Você é o(a) checador(a) de plantão. Em cada partida, o relógio da redação limita seus minutos de investigação. Escolha as ações certas, reúna pistas, carimbe sua decisão e proteja sua reputação. Há combo, níveis, conquistas e um pódio salvo no seu navegador.</p>
+      <p>Você é o(a) checador(a) de plantão. Em cada partida, você tem fichas de investigação limitadas, sem cronômetro. Escolha as ações certas, reúna pistas, carimbe sua decisão e proteja sua reputação. Há combo, níveis, conquistas e um pódio global entre todos os jogadores.</p>
       <p><a class="btn" href="jogo.html">Jogar agora</a></p>
     </section>
 
@@ -238,7 +293,8 @@ footer a{color:#7FE3EE}
 /* ===== CONFIGURAÇÃO: cole aqui o ID ou o link do vídeo do YouTube =====
    Aceita tanto o ID puro ("Cj0--_wb9nQ") quanto o link colado inteiro
    (https://youtu.be/Cj0--_wb9nQ?si=... ou https://www.youtube.com/watch?v=Cj0--_wb9nQ). */
-const VIDEOS = { m1:"0idvriv2-Vo", m2:"SmuPgqYJOOU", m3:"CFH8paiIK00", m4:"vqRvP-Dg7YM" };
+const VIDEOS = { m1:"0idvriv2-Vo", m2:"SmuPgqYJOOU", m3:"CFH8paiIK00", m4:"vqRvP-Dg7YM",
+  m5:"" /* podcast: cole aqui o ID do vídeo do podcast no YouTube */ };
 
 document.querySelectorAll(".video").forEach(el=>{
   const id = VIDEOS[el.dataset.video];
